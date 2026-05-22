@@ -1,0 +1,36 @@
+{
+  "name": "Fatemi Gold Business Suite",
+  "short_name": "Fatemi Gold",
+  "description": "Complete business management for Fatemi Gold",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0D0C0A",
+  "theme_color": "#C9A84C",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Workshop",
+      "url": "/supervisor",
+      "description": "Open workshop view"
+    },
+    {
+      "name": "My Tasks",
+      "url": "/worker",
+      "description": "Open worker tasks"
+    }
+  ]
+}
