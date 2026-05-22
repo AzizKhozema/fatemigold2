@@ -164,10 +164,11 @@ export default function ThreeDViewer({ shape, karat, size = 300 }: Props) {
       ctx.clearRect(0, 0, size, size)
       const swing = Math.sin(angle) * size * 0.03
 
-      const leftX = cx - size * 0.18
-      const rightX = cx + size * 0.18
+      const leftX: number = cx - size * 0.18;
+      const rightX: number = cx + size * 0.18;
+      const positions: [number, number][] = [[leftX, cy], [rightX, cy]];
 
-      [[leftX, cy], [rightX, cy]].forEach(([ex, ey], idx) => {
+      positions.forEach(([ex, ey], idx) => {
         const s = idx === 0 ? -1 : 1
         const sx = ex + swing * s
         const sy = ey

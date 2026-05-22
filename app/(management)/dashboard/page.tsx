@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import {
   TrendingUp, TrendingDown, AlertTriangle,
   ShoppingCart, ArrowUpRight, Coins, Hammer, Workflow, Pencil,
@@ -145,7 +146,14 @@ export default function DashboardPage() {
       })
 
       setMonthlySales(monthlyRevenue)
-      setRecentOrders((recent ?? []) as RecentOrder[])
+      const formattedOrders = (recent ?? []).map(order => ({
+  ...order,
+  // Safely grab the first customer if it exists, otherwise fall back to a default object
+  customer: order.customer?.[0] ? { name: String(order.customer[0].name) } : { name: 'Unknown' }
+
+})) as RecentOrder[];
+
+      setRecentOrders(formattedOrders)
       setStockItems((inventory ?? []).slice(0, 6) as StockItem[])
       setLoading(false)
     }
@@ -294,7 +302,7 @@ export default function DashboardPage() {
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '14px' }}>
               <span style={{ fontSize: '13px', fontWeight: 500, color: 'var(--text)' }}>Stock</span>
-              <a href="/inventory" style={{ fontSize: '11px', color: 'var(--gold)', textDecoration: 'none' }}>Manage →</a>
+              <Link href="/inventory" style={{ fontSize: '11px', color: 'var(--gold)', textDecoration: 'none' }}>Manage →</Link>
             </div>
             {stockItems.length === 0 && !loading && (
               <div style={{ fontSize: '12px', color: 'var(--text-dim)', textAlign: 'center', padding: '16px' }}>No stock data</div>
