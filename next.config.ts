@@ -10,6 +10,10 @@ const withPWA = require('next-pwa')({
 
 const nextConfig: NextConfig = {
   /* config options here */
+
+  turbopack: {
+    // Leaving this empty tells Next.js you acknowledge Turbopack is active
+  },
 }
 
 module.exports = withPWA(nextConfig)
