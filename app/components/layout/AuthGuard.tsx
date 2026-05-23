@@ -12,7 +12,7 @@ type Props = {
 
 export default function AuthGuard({ children, allowedRoles }: Props) {
   const { user, loading } = useAuth()
-  const router  = useRouter()
+  const router   = useRouter()
   const pathname = usePathname()
 
   useEffect(() => {
@@ -26,8 +26,14 @@ export default function AuthGuard({ children, allowedRoles }: Props) {
       if (user.role === 'supervisor') router.replace('/supervisor')
       if (user.role === 'worker')     router.replace('/worker')
     }
-  }, [user, loading, pathname])
+  }, [user, loading])
 
+  // Show content immediately if user is cached
+  if (!loading && user && allowedRoles.includes(user.role)) {
+    return <>{children}</>
+  }
+
+  // Show minimal loader only on first load
   if (loading) {
     return (
       <div style={{
@@ -36,16 +42,26 @@ export default function AuthGuard({ children, allowedRoles }: Props) {
         background: 'var(--bg)',
       }}>
         <div style={{
-          width: '36px', height: '36px', borderRadius: '50%',
-          border: '2px solid var(--border)', borderTopColor: 'var(--gold)',
-          animation: 'spin 0.8s linear infinite',
-        }} />
+          display: 'flex', flexDirection: 'column',
+          alignItems: 'center', gap: '16px',
+        }}>
+          <div style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: '24px', color: 'var(--gold)',
+          }}>
+            Fatemi Gold
+          </div>
+          <div style={{
+            width: '32px', height: '32px', borderRadius: '50%',
+            border: '2px solid var(--border)',
+            borderTopColor: 'var(--gold)',
+            animation: 'spin 0.8s linear infinite',
+          }} />
+        </div>
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
     )
   }
 
-  if (!user || !allowedRoles.includes(user.role)) return null
-
-  return <>{children}</>
+  return null
 }

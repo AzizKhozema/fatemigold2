@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { signIn, getRoleRedirect } from '@/lib/auth'
 import { getCurrentUser } from '@/lib/auth'
-
+import { supabase } from '@/lib/supabase_client'
 export default function LoginPage() {
   const router = useRouter()
   const [email, setEmail]       = useState('')
@@ -15,11 +15,18 @@ export default function LoginPage() {
   const [showPass, setShowPass] = useState(false)
 
   useEffect(() => {
-    getCurrentUser().then(user => {
-      if (user) router.replace(getRoleRedirect(user.role))
-      else setChecking(false)
-    })
-  }, [])
+  // Check cached session first — instant, no network call
+  supabase.auth.getSession().then(async ({ data: { session } }) => {
+    if (session) {
+      const user = await getCurrentUser()
+      if (user) {
+        router.replace(getRoleRedirect(user.role))
+        return
+      }
+    }
+    setChecking(false)
+  })
+}, [])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()

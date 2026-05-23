@@ -1,13 +1,20 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
 
 if (!supabaseUrl || !supabaseKey) {
-  throw new Error('Missing Supabase Environment Variables');
+  throw new Error('Missing Supabase Environment Variables')
 }
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
+export const supabase = createClient(supabaseUrl, supabaseKey, {
+  auth: {
+    persistSession:    true,
+    autoRefreshToken:  true,
+    storageKey:        'fatemi_auth',
+    storage:           typeof window !== 'undefined' ? window.localStorage : undefined,
+  },
+})
 
 export const GOLD_RATES: Record<string, number> = {
   '24K': 32450,
@@ -19,8 +26,8 @@ export const GOLD_RATES: Record<string, number> = {
 
 export function formatPKR(amount: number): string {
   return new Intl.NumberFormat('en-PK', {
-    style: 'currency',
-    currency: 'PKR',
+    style:                 'currency',
+    currency:              'PKR',
     maximumFractionDigits: 0,
   }).format(amount)
 }
