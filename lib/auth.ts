@@ -3,18 +3,20 @@ import { supabase } from '@/lib/supabase_client'
 export type UserRole = 'admin' | 'supervisor' | 'worker'
 
 export type AuthUser = {
-  id: string
-  email: string
+  id:          string
+  email:       string
   employee_id: string
-  name: string
-  role: UserRole
-  username: string
+  name:        string
+  role:        UserRole
+  username:    string
 }
 
 export async function getCurrentUser(): Promise<AuthUser | null> {
   try {
-    const { data: { session } } = await supabase.auth.getSession()
-    if (!session?.user) return null
+    const { data: { session }, error: sessionError } =
+      await supabase.auth.getSession()
+
+    if (sessionError || !session?.user) return null
 
     const { data: employee, error } = await supabase
       .from('employees')

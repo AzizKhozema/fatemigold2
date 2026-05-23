@@ -1,20 +1,9 @@
-import { createClient } from '@supabase/supabase-js'
+import { createBrowserClient } from '@supabase/ssr'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
-
-if (!supabaseUrl || !supabaseKey) {
-  throw new Error('Missing Supabase Environment Variables')
-}
-
-export const supabase = createClient(supabaseUrl, supabaseKey, {
-  auth: {
-    persistSession:    true,
-    autoRefreshToken:  true,
-    storageKey:        'fatemi_auth',
-    storage:           typeof window !== 'undefined' ? window.localStorage : undefined,
-  },
-})
+export const supabase = createBrowserClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
+)
 
 export const GOLD_RATES: Record<string, number> = {
   '24K': 32450,
